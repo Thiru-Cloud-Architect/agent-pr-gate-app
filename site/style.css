@@ -18,6 +18,8 @@
 
 * { box-sizing: border-box; }
 
+html { scroll-padding-top: 4.75rem; }
+
 body {
   margin: 0;
   background:
@@ -264,7 +266,15 @@ textarea { resize: vertical; }
   font-size: 0.95rem;
 }
 
-.gh p, .gh li { line-height: 1.45; }
+.gh p, .gh li { line-height: 1.45; overflow-wrap: anywhere; }
+
+.gh code {
+  font-size: 0.86em;
+  background: #efe6d8;
+  padding: 0.05rem 0.28rem;
+  border-radius: 4px;
+  white-space: nowrap;
+}
 
 .gh table {
   width: 100%;
@@ -306,6 +316,7 @@ footer {
 }
 
 @media (max-width: 860px) {
+  html { scroll-padding-top: 7.25rem; }
   .hero, .workbench { grid-template-columns: 1fr; }
   .top { align-items: flex-start; flex-direction: column; }
   .hero { padding-top: 2.2rem; }

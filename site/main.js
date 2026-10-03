@@ -23,13 +23,7 @@ for (const scenario of scenarios) {
   presets.append(button)
 }
 
-let activeId = null
-
-form.addEventListener("input", (event) => {
-  if (event.target !== failInput) {
-    activeId = null
-    clearPressed()
-  }
+form.addEventListener("input", () => {
   draw()
 })
 
@@ -37,23 +31,17 @@ applyScenario("agent-prod")
 
 function applyScenario(id) {
   const scenario = scenarios.find((item) => item.id === id)
-  activeId = id
   actorInput.value = scenario.input.actor
   typeInput.value = scenario.input.actorType
   filesInput.value = scenario.input.files.map((file) => file.filename).join("\n")
-  for (const button of presets.querySelectorAll("button")) {
-    button.setAttribute("aria-pressed", button.dataset.id === id ? "true" : "false")
-  }
   draw()
 }
 
-function clearPressed() {
-  for (const button of presets.querySelectorAll("button")) button.setAttribute("aria-pressed", "false")
-}
-
 function draw() {
-  const scenario = scenarios.find((item) => item.id === activeId)
-  const preset = scenario && sameFiles(scenario) ? scenario : null
+  const preset = scenarios.find((item) => sameFiles(item)) || null
+  for (const button of presets.querySelectorAll("button")) {
+    button.setAttribute("aria-pressed", preset && button.dataset.id === preset.id ? "true" : "false")
+  }
   const files = preset
     ? preset.input.files
     : filesInput.value
@@ -179,8 +167,25 @@ function pill(text, kind) {
 function el(tag, className, text) {
   const node = document.createElement(tag)
   if (className) node.className = className
-  if (text != null) node.textContent = text
+  if (text != null) fillText(node, text)
   return node
+}
+
+function fillText(node, text) {
+  const parts = String(text).split(/(`[^`\n]+`)/g)
+  if (parts.length === 1) {
+    node.textContent = text
+    return
+  }
+  for (const part of parts) {
+    if (part.startsWith("`") && part.endsWith("`") && part.length > 2) {
+      const code = document.createElement("code")
+      code.textContent = part.slice(1, -1)
+      node.append(code)
+    } else if (part) {
+      node.append(document.createTextNode(part))
+    }
+  }
 }
 
 function whoText(report) {
