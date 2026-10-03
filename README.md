@@ -40,11 +40,11 @@ Open <http://127.0.0.1:43123>. Switch the sample pull requests and edit the file
 
 ## Install the action on another repo
 
-This action is meant to be used from `thirumalaikumar-pappaiah/agent-gate`. After that repository is on GitHub, tag `v1`, then add this step:
+This action is meant to be used from `thirumalaikumar-pappaiah/agent-pr-gate-app`. After that repository is on GitHub, tag `v1`, then add this step:
 
 <!-- install-snippet:start -->
 ```yaml
-- uses: thirumalaikumar-pappaiah/agent-gate@v1
+- uses: thirumalaikumar-pappaiah/agent-pr-gate-app@v1
   with:
     fail-on-risk: never
     policy-path: .agent-gate/policy.yaml
@@ -67,7 +67,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: thirumalaikumar-pappaiah/agent-gate@v1
+      - uses: thirumalaikumar-pappaiah/agent-pr-gate-app@v1
         with:
           fail-on-risk: never
 ```
