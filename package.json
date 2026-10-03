@@ -1,0 +1,20 @@
+{
+  "name": "agent-gate",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "GitHub Action that comments who changed production and how to revoke that agent.",
+  "scripts": {
+    "test": "node --test",
+    "comment": "node src/run.js --scenario agent-prod",
+    "dev": "vite --config site/vite.config.js",
+    "build": "vite build --config site/vite.config.js",
+    "preview": "vite preview --config site/vite.config.js --host 0.0.0.0 --port 43123"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "devDependencies": {
+    "vite": "^6.3.5"
+  }
+}

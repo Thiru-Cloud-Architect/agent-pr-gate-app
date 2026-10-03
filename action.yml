@@ -1,0 +1,40 @@
+name: Agent Gate
+description: >
+  Comment on a pull request with the actor, the production paths they
+  touched, the rollback, and the policy edit that revokes an agent.
+inputs:
+  fail-on-risk:
+    description: Set to high to fail the check when risk is high. Any other value only comments.
+    required: false
+    default: never
+  policy-path:
+    description: Policy file path inside the repository.
+    required: false
+    default: .agent-gate/policy.yaml
+  token:
+    description: Token used to read pull request files and to post one comment.
+    required: false
+    default: ${{ github.token }}
+  api-key:
+    description: Optional model key. Leave empty to keep the deterministic review.
+    required: false
+    default: ""
+  model:
+    description: Optional model name sent with api-key. Defaults to gpt-4o-mini when a key is set.
+    required: false
+    default: ""
+runs:
+  using: composite
+  steps:
+    - name: Review pull request
+      shell: bash
+      env:
+        AGENT_GATE_TOKEN: ${{ inputs.token }}
+        AGENT_GATE_FAIL_ON_RISK: ${{ inputs.fail-on-risk }}
+        AGENT_GATE_POLICY_PATH: ${{ inputs.policy-path }}
+        BLAST_RADIUS_API_KEY: ${{ inputs.api-key }}
+        BLAST_RADIUS_MODEL: ${{ inputs.model }}
+      run: node "${{ github.action_path }}/src/run.js"
+branding:
+  icon: shield
+  color: gray-dark

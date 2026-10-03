@@ -1,0 +1,21 @@
+version: 1
+paths:
+  - path: action.yml
+    service: agent-gate
+    environment: production
+    risk: high
+  - path: src/**
+    service: agent-gate
+    environment: production
+    risk: medium
+  - path: .github/workflows/**
+    service: agent-gate
+    environment: production
+    risk: medium
+agents:
+  - name: dependabot
+    actors:
+      - dependabot[bot]
+    allow:
+      - package.json
+      - package-lock.json

@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Agent Gate — which agent touched production?</title>
+    <meta
+      name="description"
+      content="Agent Gate is a GitHub Action that comments who changed production, what can break, and the one policy edit that revokes an agent."
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,650&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header class="top">
+      <a class="mark" href="#top">Agent Gate</a>
+      <nav>
+        <a href="#try">Try a pull request</a>
+        <a href="#install">Install</a>
+        <a href="#policy">Policy</a>
+      </nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div>
+          <p class="eyebrow">GitHub Action · no cloud account · no model key</p>
+          <h1>Which agent touched production?</h1>
+          <p class="lede">
+            Coding agents open pull requests. Agent Gate comments on the request: who did it, which
+            production paths moved, how to roll back, and the one policy edit that revokes that agent.
+          </p>
+          <div class="hero-actions">
+            <a class="button" href="#try">Review a sample pull request</a>
+            <a class="button quiet" href="#install">Six-line install</a>
+          </div>
+        </div>
+        <dl class="facts">
+          <div>
+            <dt>Runs on</dt>
+            <dd>The repository’s GitHub Actions minutes. A surge does not bill you.</dd>
+          </div>
+          <div>
+            <dt>Needs</dt>
+            <dd>A policy file in the repo. AWS, a domain, and a model key come later.</dd>
+          </div>
+          <div>
+            <dt>Blocks merge</dt>
+            <dd>Only if you set <code>fail-on-risk: high</code>. Otherwise it is a comment.</dd>
+          </div>
+        </dl>
+      </section>
+
+      <section id="try" class="panel">
+        <div class="section-head">
+          <h2>Try a pull request</h2>
+          <p>The same function the action runs. Nothing is uploaded.</p>
+        </div>
+        <div class="workbench">
+          <form id="review-form">
+            <div class="presets" role="group" aria-label="Sample pull requests"></div>
+            <label>
+              Actor
+              <input id="actor" name="actor" autocomplete="off" spellcheck="false" value="cursor[bot]" />
+            </label>
+            <label>
+              Actor type
+              <select id="actor-type" name="actor-type">
+                <option value="Bot" selected>Bot</option>
+                <option value="User">User</option>
+              </select>
+            </label>
+            <label>
+              Changed files, one path per line
+              <textarea id="files" name="files" rows="6" spellcheck="false"></textarea>
+            </label>
+            <label class="check">
+              <input id="fail-high" type="checkbox" />
+              Fail the check when risk is high
+            </label>
+          </form>
+          <div id="comment" class="comment-slot" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <section id="install" class="panel">
+        <div class="section-head">
+          <h2>Install</h2>
+          <p>Replace <code>OWNER</code> with your GitHub username after you publish this repo. Checkout has to come first so the policy file is on disk.</p>
+        </div>
+        <pre class="code"><code>- uses: OWNER/agent-gate@v1
+  with:
+    fail-on-risk: never
+    policy-path: .agent-gate/policy.yaml
+    api-key: ${{ secrets.BLAST_RADIUS_API_KEY }}
+    model: ${{ vars.BLAST_RADIUS_MODEL }}</code></pre>
+        <p class="note">Leave <code>api-key</code> unset and the comment is still posted. The key only adds a short summary.</p>
+      </section>
+
+      <section id="policy" class="panel">
+        <div class="section-head">
+          <h2>The kill switch is a file</h2>
+          <p>Agents you trust get an allow list. Production paths you care about get a risk. Deny removes an agent in the next pull request.</p>
+        </div>
+        <pre class="code" id="policy-view"></pre>
+      </section>
+    </main>
+
+    <footer>
+      <p>Agent Gate is the first slice of a production review desk: comment now, org memory and a hosted audit when a team asks.</p>
+    </footer>
+    <script type="module" src="./main.js"></script>
+  </body>
+</html>
