@@ -72,7 +72,7 @@ test("readme install snippet matches action.yml", () => {
   const yaml = block[1].replace(/```yaml|```/g, "").trim()
   const lines = yaml.split("\n")
   assert.equal(lines.length, 6)
-  assert.equal(lines[0], "- uses: thirumalaikumar-pappaiah/agent-pr-gate-app@v1")
+  assert.equal(lines[0], "- uses: Thiru-Cloud-Architect/agent-pr-gate-app@v1")
   for (const input of ["fail-on-risk", "policy-path", "api-key", "model", "token"]) {
     assert.match(action, new RegExp(`^  ${input}:`, "m"))
   }
