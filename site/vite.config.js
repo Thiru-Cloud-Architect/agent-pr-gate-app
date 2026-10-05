@@ -1,3 +1,4 @@
+import { cpSync, mkdirSync } from "node:fs"
 import { dirname, resolve } from "node:path"
 import { fileURLToPath } from "node:url"
 import { defineConfig } from "vite"
@@ -15,7 +16,23 @@ export default defineConfig({
   build: {
     outDir: "dist",
     emptyOutDir: true,
+    rollupOptions: {
+      input: {
+        main: resolve(root, "index.html"),
+        org: resolve(root, "org.html"),
+      },
+    },
   },
+  plugins: [
+    {
+      name: "copy-org-sample",
+      closeBundle() {
+        const destination = resolve(root, "dist/data")
+        mkdirSync(destination, { recursive: true })
+        cpSync(resolve(root, "data"), destination, { recursive: true })
+      },
+    },
+  ],
   resolve: {
     alias: {
       "@src": resolve(root, "../src"),
