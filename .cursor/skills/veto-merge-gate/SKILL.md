@@ -1,12 +1,12 @@
 ---
 name: veto-merge-gate
 description: >-
-  Makes the VETO GitHub check fail on critical findings so branch protection
+  Makes the KORV GitHub check fail on critical findings so branch protection
   can block merge. Use when changing fail-on-risk, shouldFail, action.yml, or
   the check line in the pull request comment.
 ---
 
-# VETO merge gate
+# KORV merge gate
 
 `fail-on-risk` defaults to `critical`.
 

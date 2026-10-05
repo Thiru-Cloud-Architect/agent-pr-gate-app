@@ -1,12 +1,12 @@
 ---
 name: veto-coverage
 description: >-
-  States which security lanes VETO actually scans. Use when the user mentions
+  States which security lanes KORV actually scans. Use when the user mentions
   SCA, SAST, DAST, code coverage, IaC, container scanning, Dependabot, Snyk,
   StackHawk, Prisma, Orca, or Wiz.
 ---
 
-# VETO coverage
+# KORV coverage
 
 The pull request check reads the diff. Say what is implemented. Do not claim the other lanes.
 
@@ -20,6 +20,6 @@ The pull request check reads the diff. Say what is implemented. Do not claim the
 | Tests | Yes. A missing test file in the diff. Not a coverage percentage. |
 | DAST | No. A running application is not opened. |
 | Cloud account | No. Prisma, Orca, and Wiz need a cloud login. |
-| Dependabot | No. VETO does not open Dependabot pull requests. It can still flag a version Dependabot would flag. |
+| Dependabot | No. KORV does not open Dependabot pull requests. It can still flag a version Dependabot would flag. |
 
 Critical findings fail the job when `fail-on-risk` is `critical` or `high`. Merge is blocked only when branch protection requires the check.

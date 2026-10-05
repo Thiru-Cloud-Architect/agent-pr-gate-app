@@ -1,8 +1,8 @@
-# Agent Gate
+# KORV
 
-VETO is the name on the website. The check is still Agent Gate: one comment on a pull request for production changes, leaked secrets, known-vulnerable packages, and dangerous code. The page in `site/` runs in the browser. On GitHub Actions the same rules run through `scanner/scan.py`, which also asks the public OSV service about package versions.
+KORV is the product at korv.ai. It reads a pull request, shows the account’s repositories on one portfolio, and fails the `gate` job when a finding is critical. The page in `site/` runs in the browser. On GitHub Actions the same rules run through `scanner/scan.py`, which also asks the public OSV service about package versions.
 
-Agent Gate is a review desk for pull requests opened by coding agents. It has two parts:
+KORV is a review desk for pull requests opened by coding agents. It has two parts:
 
 - A **GitHub Action** that posts one comment on each pull request.
 - A **one-page website** that runs the same review on sample pull requests, so you can try a policy before wiring the action into a repo.
@@ -58,7 +58,7 @@ This action is meant to be used from `Thiru-Cloud-Architect/agent-pr-gate-app`. 
 The workflow around that step:
 
 ```yaml
-name: Agent Gate
+name: KORV
 on:
   pull_request:
 permissions:

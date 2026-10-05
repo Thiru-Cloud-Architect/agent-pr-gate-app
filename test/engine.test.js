@@ -242,7 +242,7 @@ test("a model outage does not fail a low-risk review", async () => {
 test("finds the sticky comment and ignores other comments", () => {
   const found = findExistingComment([
     { id: 1, body: "nice" },
-    { id: 2, body: "<!-- agent-gate -->\n## Agent Gate" },
+    { id: 2, body: "<!-- agent-gate -->\n## KORV" },
   ])
   assert.equal(found.id, 2)
   assert.equal(findExistingComment([{ id: 1, body: "no marker" }]), null)

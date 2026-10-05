@@ -1,4 +1,4 @@
-name: Agent Gate
+name: KORV
 on:
   pull_request:
 permissions:

@@ -1,12 +1,12 @@
 ---
 name: veto-org-dashboard
 description: >-
-  Builds the VETO organization dashboard from repository files. Use when
+  Builds the KORV organization dashboard from repository files. Use when
   editing site/org.html, site/org.js, site/data/org.json, or scanner/org_scan.py,
   or when asked for a company, team, or org view of findings.
 ---
 
-# VETO organization dashboard
+# KORV organization dashboard
 
 `scanner/org_scan.py` reads repositories for the signed-in GitHub user and writes `site/data/org.json`. `site/org.html` renders that file.
 

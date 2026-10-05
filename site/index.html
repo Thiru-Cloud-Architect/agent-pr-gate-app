@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>VETO — one comment on the pull request</title>
+    <title>KORV — findings, the fix, and the merge</title>
     <meta
       name="description"
-      content="VETO posts one pull request comment for production changes, leaked secrets, known-vulnerable packages, and dangerous code."
+      content="KORV lists findings across your repositories, opens a fix pull request, and fails the merge check when a finding is critical."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -18,7 +18,7 @@
   </head>
   <body>
     <header class="top">
-      <a class="mark" href="#top">VETO</a>
+      <a class="mark" href="#top">KORV</a>
       <nav>
         <a href="#seen">See it on a pull request</a>
         <a href="./org.html">Portfolio</a>
@@ -29,12 +29,30 @@
 
     <main id="top">
       <section class="hero">
-        <p class="eyebrow">Agent Gate, sold as one comment</p>
-        <h1>One comment. Not five security tools.</h1>
+        <p class="eyebrow">korv.ai</p>
+        <h1>See the finding. Open the fix. Stop the merge.</h1>
         <p class="lede">
-          VETO comments on the pull request. It says who opened it, whether production changed,
-          whether a secret or an old package slipped in, and what to do next.
+          KORV is one place for a personal project or a company. It reads the pull request,
+          lists the repositories it scanned, and opens a fix on that repository.
+          A critical finding fails the check named <code>gate</code>.
         </p>
+        <ol class="steps">
+          <li>
+            <strong>A bot resizes the database.</strong>
+            <code>cursor[bot]</code> changes the payments database from <code>db.t4g.micro</code> to <code>db.m6g.large</code> and raises copies from 2 to 8.
+            KORV says do not merge, and shows the rule that blocks that agent next time.
+          </li>
+          <li>
+            <strong>A token and an old package.</strong>
+            The pull request adds a GitHub token and <code>lodash</code> 4.17.20.
+            KORV names the file and says upgrade to 4.17.21. The token value is not copied into the comment.
+          </li>
+          <li>
+            <strong>The same findings, across repositories.</strong>
+            Open the portfolio, pick MediaWikiCloudInfra, and use <strong>Open fix pull request</strong>.
+            That button opens the repository. You still merge it.
+          </li>
+        </ol>
         <table class="coverage">
           <thead>
             <tr>
@@ -65,7 +83,7 @@
             </tr>
             <tr>
               <td>Not in this check</td>
-              <td>A running application, and a cloud account. StackHawk, Prisma, Orca, and Wiz need those. Dependabot still opens its own pull requests. VETO reads the versions in the diff.</td>
+              <td>A running application, and a cloud account. Those are a later phase. KORV reads repository files today. Dependabot still opens its own pull requests.</td>
             </tr>
           </tbody>
         </table>
@@ -85,16 +103,16 @@
         </div>
         <div class="shots">
           <figure>
-            <img src="./media/pull-request-comment.png" alt="GitHub comment from Agent Gate. Verdict Allowed, risk High, opened by Thiru-Cloud-Architect, a person. The production file is demo/prod/web.yaml." />
+            <img src="./media/pull-request-comment.png" alt="GitHub comment. Verdict Allowed, risk High, opened by Thiru-Cloud-Architect, a person. The production file is demo/prod/web.yaml." />
             <figcaption>
               <strong>The comment.</strong>
               Allowed means a person opened it, not a blocked bot.
               High means the new file is production.
-              The pull request can still merge, because the check only comments unless you ask it to fail.
+              This picture is from an earlier run, so the heading still says Agent Gate. New comments say KORV.
             </figcaption>
           </figure>
           <figure>
-            <img src="./media/check-passed.png" alt="GitHub Actions run with a green check for the Agent Gate workflow on the same pull request." />
+            <img src="./media/check-passed.png" alt="GitHub Actions run with a green check. The job on that run was named gate." />
             <figcaption>
               <strong>The check.</strong>
               The job is named gate. This run passed because it was set to comment only. A critical finding now fails the job.
@@ -144,7 +162,7 @@
           <article>
             <h3>1. Add this workflow</h3>
             <p>Save it as <code>.github/workflows/agent-gate.yml</code>.</p>
-            <pre class="code"><code>name: Agent Gate
+            <pre class="code"><code>name: KORV
 on:
   pull_request:
 permissions:
@@ -175,7 +193,7 @@ jobs:
     </main>
 
     <footer>
-      <p>VETO comments on the pull request. You still decide whether to merge.</p>
+      <p>KORV is the product name. You still decide whether to merge. A model that writes the fix is the next step, not this page.</p>
     </footer>
     <script type="module" src="./main.js"></script>
   </body>

@@ -97,7 +97,7 @@ export async function reviewEvent(options) {
       fetchImpl: options.fetchImpl,
     })
   } catch (error) {
-    options.log?.(`Agent Gate could not post the comment: ${error.message}`)
+    options.log?.(`KORV could not post the comment: ${error.message}`)
   }
 
   if (options.summary) options.summary(report.comment)
@@ -113,7 +113,7 @@ async function main() {
   }
 
   if (!process.env.GITHUB_EVENT_PATH) {
-    process.stderr.write("Agent Gate runs inside GitHub Actions, or locally with --scenario <id>.\n")
+    process.stderr.write("KORV runs inside GitHub Actions, or locally with --scenario <id>.\n")
     process.exit(1)
   }
 
@@ -139,7 +139,7 @@ async function main() {
   })
 
   if (result.error) process.stderr.write(`${result.error}\n`)
-  if (result.skipped) process.stdout.write(`Agent Gate skipped: ${result.skipped}\n`)
+  if (result.skipped) process.stdout.write(`KORV skipped: ${result.skipped}\n`)
   process.exit(result.exitCode)
 }
 

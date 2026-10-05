@@ -1,4 +1,4 @@
-// YAML reader for the Agent Gate policy shape.
+// YAML reader for the KORV policy shape.
 // Supports comments, scalars, nested maps, and lists of scalars or maps.
 
 export const defaultPolicyText = `version: 1

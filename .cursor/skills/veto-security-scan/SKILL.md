@@ -1,12 +1,12 @@
 ---
 name: veto-security-scan
 description: >-
-  Adds secret, dependency, and dangerous-code checks to VETO. Use when editing
+  Adds secret, dependency, and dangerous-code checks to KORV. Use when editing
   scanner/rules.json, scanner/scan.py, src/security.js, OSV lookups, SCA, SAST,
   or secret scanning.
 ---
 
-# VETO security scan
+# KORV security scan
 
 `scanner/rules.json` is the rule list for secrets, code, infrastructure, containers, and the bundled package advisory. `src/security.js` runs it in the browser demo and adds the missing-test note. `scanner/scan.py` runs the same rules on GitHub Actions and adds a public OSV lookup.
 

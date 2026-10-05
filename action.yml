@@ -1,7 +1,8 @@
-name: VETO
+name: KORV
 description: >
-  One pull request comment for production changes, leaked secrets,
-  known-vulnerable packages, and dangerous code.
+  KORV comments on a pull request, lists findings for the account, and fails
+  the gate job on a critical finding. Leaked secrets, old packages, dangerous
+  code, and open infrastructure are named in the comment.
 inputs:
   fail-on-risk:
     description: >

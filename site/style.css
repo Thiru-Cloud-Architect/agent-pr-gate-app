@@ -70,7 +70,7 @@ nav a:hover { color: var(--ink); }
 main { padding: 0 6vw 4rem; }
 
 .hero {
-  max-width: 46rem;
+  max-width: 52rem;
   padding: 3.2rem 0 2rem;
 }
 

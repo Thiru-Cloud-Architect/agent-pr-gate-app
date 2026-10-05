@@ -15,7 +15,7 @@ const VERDICT_LEAD = {
 export function renderComment(report) {
   const lines = [
     MARKER,
-    "## Agent Gate",
+    "## KORV",
     "",
     `| | |`,
     `| --- | --- |`,
