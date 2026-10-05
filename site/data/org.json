@@ -1,6 +1,6 @@
 {
   "account": "Thiru-Cloud-Architect",
-  "scannedAt": "2026-10-04T17:03:51Z",
+  "scannedAt": "2026-10-05T04:45:00Z",
   "notScanned": [
     {
       "name": "Running application",
@@ -26,6 +26,16 @@
       "url": "https://github.com/Thiru-Cloud-Architect/gke-fastapi-platform",
       "private": false,
       "findings": [
+        {
+          "kind": "secret",
+          "id": "demo-token",
+          "title": "A token is stored in the repository",
+          "severity": "high",
+          "filename": "demo/veto/settings.py",
+          "package": "",
+          "version": "",
+          "fix": "Remove the sample token from the repository."
+        },
         {
           "kind": "practice",
           "id": "missing-test",
@@ -95,6 +105,16 @@
       "url": "https://github.com/Thiru-Cloud-Architect/online-portfolio-project-samples",
       "private": false,
       "findings": [
+        {
+          "kind": "code",
+          "id": "sql-concat",
+          "title": "A database query is built from text",
+          "severity": "high",
+          "filename": "demo/veto/lookup.py",
+          "package": "",
+          "version": "",
+          "fix": "Use a parameterized query. Do not join input into the SQL text."
+        },
         {
           "kind": "practice",
           "id": "missing-test",

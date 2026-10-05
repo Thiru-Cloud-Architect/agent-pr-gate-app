@@ -74,6 +74,17 @@ test("secrets, dangerous calls, and old packages are named without repeating the
   assert.equal(clean.secrets.length, 0)
 })
 
+test("a joined SQL query and a demo token are findings, and the token is not copied", () => {
+  const token = "veto_demo_sampletoken0001"
+  const report = scanFiles([
+    { filename: "demo/veto/lookup.py", patch: `+cursor.execute("SELECT id FROM accounts WHERE email = '" + email + "'")\n` },
+    { filename: "demo/veto/settings.py", patch: `+TOKEN = "${token}"\n` },
+  ])
+  assert.equal(report.code.some((item) => item.id === "sql-concat"), true)
+  assert.equal(report.secrets.some((item) => item.id === "demo-token"), true)
+  assert.equal(JSON.stringify(report).includes(token), false)
+})
+
 test("critical mode fails the job and infrastructure findings are named", () => {
   const report = evaluate({
     actor: "cursor[bot]",

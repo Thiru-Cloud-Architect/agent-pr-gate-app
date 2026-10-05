@@ -23,6 +23,12 @@
       "title": "Private key",
       "severity": "high",
       "pattern": "-----BEGIN (?:RSA |OPENSSH |EC )?PRIVATE KEY-----"
+    },
+    {
+      "id": "demo-token",
+      "title": "A token is stored in the repository",
+      "severity": "high",
+      "pattern": "veto_demo_[A-Za-z0-9]{12,}"
     }
   ],
   "code": [
@@ -55,6 +61,12 @@
       "title": "HTML is inserted from data",
       "severity": "medium",
       "pattern": "dangerouslySetInnerHTML"
+    },
+    {
+      "id": "sql-concat",
+      "title": "A database query is built from text",
+      "severity": "high",
+      "pattern": "execute\\([^\\n]{0,80}SELECT[^\\n]{0,80}\\+"
     }
   ],
   "advisories": [

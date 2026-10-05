@@ -214,6 +214,82 @@ button.preset[aria-pressed="true"] {
 
 .coverage th { color: var(--brass); font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; }
 
+.stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.7rem;
+  margin: 1.4rem 0 0.4rem;
+}
+
+.stat {
+  background: var(--bg-raise);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 0.85rem 1rem;
+}
+
+.stat strong {
+  display: block;
+  font-family: Fraunces, Georgia, serif;
+  font-size: 2rem;
+  font-weight: 560;
+  letter-spacing: -0.03em;
+}
+
+.stat span {
+  color: var(--muted);
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.filters { display: flex; flex-wrap: wrap; gap: 0.45rem; margin: 0.2rem 0 1rem; }
+
+button.filter, button.repo-name {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  font: 500 0.88rem/1.2 "IBM Plex Sans", sans-serif;
+  cursor: pointer;
+}
+
+button.filter[aria-pressed="true"], button.repo-name[aria-pressed="true"] {
+  border-color: var(--brass);
+  color: var(--brass);
+}
+
+.table-wrap { overflow-x: auto; }
+
+table.portfolio {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table.portfolio th, table.portfolio td {
+  text-align: left;
+  padding: 0.7rem 0.55rem;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+table.portfolio thead th {
+  color: var(--brass);
+  font-size: 0.78rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+table.portfolio tr.is-selected { background: rgba(226, 177, 90, 0.08); }
+
+button.repo-name {
+  border-radius: 8px;
+  padding: 0.2rem 0.45rem;
+  font-size: 1rem;
+}
+
 .repo-list { display: grid; gap: 0.6rem; }
 
 button.repo {
@@ -470,7 +546,7 @@ footer {
 
 @media (max-width: 860px) {
   html { scroll-padding-top: 7.25rem; }
-  .workbench, .install-grid, .shots { grid-template-columns: 1fr; }
+  .workbench, .install-grid, .shots, .stats { grid-template-columns: 1fr 1fr; }
   .top { align-items: flex-start; flex-direction: column; }
   .hero { padding-top: 2.2rem; }
 }

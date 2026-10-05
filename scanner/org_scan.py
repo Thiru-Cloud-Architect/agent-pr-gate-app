@@ -37,6 +37,8 @@ FIX = {
     "github-fine": "Remove the token and rotate it.",
     "aws-access-key": "Remove the key and rotate it.",
     "private-key": "Remove the key and rotate it.",
+    "demo-token": "Remove the sample token from the repository.",
+    "sql-concat": "Use a parameterized query. Do not join input into the SQL text.",
     "missing-test": "Add a test for this repository.",
 }
 
@@ -129,6 +131,8 @@ def interesting(path):
 
 def rank(path):
     lowered = path.lower()
+    if "/demo/veto/" in f"/{lowered}":
+        return 0
     if lowered.rsplit("/", 1)[-1].startswith("dockerfile"):
         return 0
     if lowered.endswith(".tf") or lowered.endswith("requirements.txt") or lowered.endswith("package.json"):
