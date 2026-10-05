@@ -1,5 +1,7 @@
 # Agent Gate
 
+VETO is the name on the website. The check is still Agent Gate: one comment on a pull request for production changes, leaked secrets, known-vulnerable packages, and dangerous code. The page in `site/` runs in the browser. On GitHub Actions the same rules run through `scanner/scan.py`, which also asks the public OSV service about package versions.
+
 Agent Gate is a review desk for pull requests opened by coding agents. It has two parts:
 
 - A **GitHub Action** that posts one comment on each pull request.
@@ -20,7 +22,7 @@ The comment is deterministic. It names:
 - **Revoke**: the policy edit that closes that path for the agent.
 - **Risk**: low, medium, or high.
 
-By default the check only comments. Set `fail-on-risk: high` when a high-risk review should fail the job.
+By default `fail-on-risk` is `critical`, so a high-risk or critical finding fails the job. GitHub blocks the merge only when branch protection requires that check. Set `fail-on-risk: never` to comment without failing.
 
 ## Cost
 
@@ -46,7 +48,7 @@ This action is meant to be used from `Thiru-Cloud-Architect/agent-pr-gate-app`. 
 ```yaml
 - uses: Thiru-Cloud-Architect/agent-pr-gate-app@v1
   with:
-    fail-on-risk: never
+    fail-on-risk: critical
     policy-path: .agent-gate/policy.yaml
     api-key: ${{ secrets.BLAST_RADIUS_API_KEY }}
     model: ${{ vars.BLAST_RADIUS_MODEL }}
@@ -69,7 +71,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: Thiru-Cloud-Architect/agent-pr-gate-app@v1
         with:
-          fail-on-risk: never
+          fail-on-risk: critical
 ```
 
 Copy [examples/policy.yaml](examples/policy.yaml) to `.agent-gate/policy.yaml` and edit the paths for your repo. A sample comment is in [examples/comment.md](examples/comment.md).
@@ -86,7 +88,7 @@ The action reads the pull request diff and posts one comment. It asks for `conte
 | Needs a named human | A listed agent touched a production path outside its allow list, or an unlisted bot touched a medium or high path. |
 | Revoked | The actor is on an agent deny list and touched a matching path. |
 
-High risk fails the job only when `fail-on-risk` is `high`.
+`critical` and `high` fail the job when the verdict is revoked, the risk is high, or a high finding is present. `never` only comments.
 
 When a Terraform file changes and the pull request has no plan JSON, or Helm values change with no rendered manifests, the comment adds an “Ask a human” note. Those filenames are not enough to claim a full plan.
 

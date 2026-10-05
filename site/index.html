@@ -3,10 +3,10 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Agent Gate — which agent touched production?</title>
+    <title>VETO — one comment on the pull request</title>
     <meta
       name="description"
-      content="Agent Gate is a GitHub Action that comments who changed production, what can break, and the one policy edit that revokes an agent."
+      content="VETO posts one pull request comment for production changes, leaked secrets, known-vulnerable packages, and dangerous code."
     />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -18,70 +18,117 @@
   </head>
   <body>
     <header class="top">
-      <a class="mark" href="#top">Agent Gate</a>
+      <a class="mark" href="#top">VETO</a>
       <nav>
-        <a href="#try">Try a pull request</a>
-        <a href="#install">Install</a>
-        <a href="#policy">Policy</a>
+        <a href="#seen">See it on a pull request</a>
+        <a href="./org.html">Your repositories</a>
+        <a href="#try">Try an example</a>
+        <a href="#install">Add it to a repo</a>
       </nav>
     </header>
 
     <main id="top">
       <section class="hero">
-        <div>
-          <p class="eyebrow">GitHub Action · no cloud account · no model key</p>
-          <h1>Which agent touched production?</h1>
-          <p class="lede">
-            Coding agents open pull requests. Agent Gate comments on the request: who did it, which
-            production paths moved, how to roll back, and the one policy edit that revokes that agent.
+        <p class="eyebrow">Agent Gate, sold as one comment</p>
+        <h1>One comment. Not five security tools.</h1>
+        <p class="lede">
+          VETO comments on the pull request. It says who opened it, whether production changed,
+          whether a secret or an old package slipped in, and what to do next.
+        </p>
+        <table class="coverage">
+          <thead>
+            <tr>
+              <th>In this check</th>
+              <th>What you see</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Secrets</td>
+              <td>The file and the kind of secret. The value is not copied into the comment.</td>
+            </tr>
+            <tr>
+              <td>Packages</td>
+              <td>A known advisory for a dependency version, with the version to upgrade to.</td>
+            </tr>
+            <tr>
+              <td>Dangerous code</td>
+              <td>A shell turned on, code run from text, or TLS checks turned off.</td>
+            </tr>
+            <tr>
+              <td>Infrastructure and containers</td>
+              <td>An open network rule, public storage, a privileged container, or an image tagged latest.</td>
+            </tr>
+            <tr>
+              <td>Tests</td>
+              <td>Application code changed and the diff has no test file. This is not a coverage percentage.</td>
+            </tr>
+            <tr>
+              <td>Not in this check</td>
+              <td>A running application, and a cloud account. StackHawk, Prisma, Orca, and Wiz need those. Dependabot still opens its own pull requests. VETO reads the versions in the diff.</td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="note">
+          A critical finding fails the GitHub job. The merge stops only after branch protection requires that check.
+          <a href="./org.html">See the sample for this GitHub account.</a>
+        </p>
+      </section>
+
+      <section id="seen" class="panel">
+        <div class="section-head">
+          <h2>This is a real pull request</h2>
+          <p>
+            <a href="https://github.com/Thiru-Cloud-Architect/online-portfolio-project-samples/pull/1">Pull request 1</a>
+            on online-portfolio-project-samples. A person added <code>demo/prod/web.yaml</code>.
           </p>
-          <div class="hero-actions">
-            <a class="button" href="#try">Review a sample pull request</a>
-            <a class="button quiet" href="#install">Six-line install</a>
-          </div>
         </div>
-        <dl class="facts">
-          <div>
-            <dt>Runs on</dt>
-            <dd>The repository’s GitHub Actions minutes. A surge does not bill you.</dd>
-          </div>
-          <div>
-            <dt>Needs</dt>
-            <dd>A policy file in the repo. AWS, a domain, and a model key come later.</dd>
-          </div>
-          <div>
-            <dt>Blocks merge</dt>
-            <dd>Only if you set <code>fail-on-risk: high</code>. Otherwise it is a comment.</dd>
-          </div>
-        </dl>
+        <div class="shots">
+          <figure>
+            <img src="./media/pull-request-comment.png" alt="GitHub comment from Agent Gate. Verdict Allowed, risk High, opened by Thiru-Cloud-Architect, a person. The production file is demo/prod/web.yaml." />
+            <figcaption>
+              <strong>The comment.</strong>
+              Allowed means a person opened it, not a blocked bot.
+              High means the new file is production.
+              The pull request can still merge, because the check only comments unless you ask it to fail.
+            </figcaption>
+          </figure>
+          <figure>
+            <img src="./media/check-passed.png" alt="GitHub Actions run with a green check for the Agent Gate workflow on the same pull request." />
+            <figcaption>
+              <strong>The check.</strong>
+              The job is named gate. This run passed because it was set to comment only. A critical finding now fails the job.
+            </figcaption>
+          </figure>
+        </div>
       </section>
 
       <section id="try" class="panel">
         <div class="section-head">
-          <h2>Try a pull request</h2>
-          <p>The same function the action runs. Nothing is uploaded.</p>
+          <h2>Try an example</h2>
+          <p>These are sample pull requests. Nothing is uploaded.</p>
         </div>
         <div class="workbench">
           <form id="review-form">
-            <div class="presets" role="group" aria-label="Sample pull requests"></div>
+            <div>
+              <p class="field-label">Pick a pull request</p>
+              <div class="presets" role="group" aria-label="Sample pull requests"></div>
+              <p id="scenario-note" class="note"></p>
+            </div>
             <label>
-              Actor
+              Who opened it
               <input id="actor" name="actor" autocomplete="off" spellcheck="false" value="cursor[bot]" />
             </label>
             <label>
-              Actor type
+              Person or bot
               <select id="actor-type" name="actor-type">
                 <option value="Bot" selected>Bot</option>
-                <option value="User">User</option>
+                <option value="User">Person</option>
               </select>
             </label>
             <label>
-              Changed files, one path per line
-              <textarea id="files" name="files" rows="6" spellcheck="false"></textarea>
-            </label>
-            <label class="check">
-              <input id="fail-high" type="checkbox" />
-              Fail the check when risk is high
+              Files they changed, one path per line
+              <textarea id="files" name="files" rows="5" spellcheck="false"></textarea>
             </label>
           </form>
           <div id="comment" class="comment-slot" aria-live="polite"></div>
@@ -90,29 +137,45 @@
 
       <section id="install" class="panel">
         <div class="section-head">
-          <h2>Install</h2>
-          <p>Replace <code>OWNER</code> with your GitHub username after you publish this repo. Checkout has to come first so the policy file is on disk.</p>
+          <h2>Add it to a repository</h2>
+          <p>Two pieces. Critical findings fail the job. In the repository settings, require the <code>gate</code> check before merge.</p>
         </div>
-        <pre class="code"><code>- uses: OWNER/agent-gate@v1
-  with:
-    fail-on-risk: never
-    policy-path: .agent-gate/policy.yaml
-    api-key: ${{ secrets.BLAST_RADIUS_API_KEY }}
-    model: ${{ vars.BLAST_RADIUS_MODEL }}</code></pre>
-        <p class="note">Leave <code>api-key</code> unset and the comment is still posted. The key only adds a short summary.</p>
-      </section>
-
-      <section id="policy" class="panel">
-        <div class="section-head">
-          <h2>The kill switch is a file</h2>
-          <p>Agents you trust get an allow list. Production paths you care about get a risk. Deny removes an agent in the next pull request.</p>
+        <div class="install-grid">
+          <article>
+            <h3>1. Add this workflow</h3>
+            <p>Save it as <code>.github/workflows/agent-gate.yml</code>.</p>
+            <pre class="code"><code>name: Agent Gate
+on:
+  pull_request:
+permissions:
+  contents: read
+  pull-requests: write
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: Thiru-Cloud-Architect/agent-pr-gate-app@v1</code></pre>
+          </article>
+          <article>
+            <h3>2. Say which paths are production</h3>
+            <p>
+              Copy the sample rules to <code>.agent-gate/policy.yaml</code>. In this demo, production means
+              <code>infra/prod/**</code> and <code>charts/payments/**</code>.
+              <code>cursor[bot]</code> may edit docs, and may not edit production.
+              <code>dependabot[bot]</code> may edit package files.
+            </p>
+            <details>
+              <summary>Show the sample rules</summary>
+              <pre class="code" id="policy-view"></pre>
+            </details>
+          </article>
         </div>
-        <pre class="code" id="policy-view"></pre>
       </section>
     </main>
 
     <footer>
-      <p>Agent Gate is the first slice of a production review desk: comment now, org memory and a hosted audit when a team asks.</p>
+      <p>VETO comments on the pull request. You still decide whether to merge.</p>
     </footer>
     <script type="module" src="./main.js"></script>
   </body>

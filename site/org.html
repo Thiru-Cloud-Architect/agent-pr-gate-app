@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>VETO — organization sample</title>
+    <meta name="description" content="A sample organization view of VETO findings across repositories." />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,560;9..144,650&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <header class="top">
+      <a class="mark" href="./index.html">VETO</a>
+      <nav>
+        <a href="./index.html">Home</a>
+        <a href="#repos">Repositories</a>
+        <a href="#findings">Findings</a>
+      </nav>
+    </header>
+    <main>
+      <section class="hero">
+        <p class="eyebrow">Sample for one GitHub account</p>
+        <h1 id="org-title">Organization</h1>
+        <p class="lede" id="org-summary">Loading the repository sample.</p>
+        <p class="note" id="org-limits"></p>
+      </section>
+      <section id="repos" class="panel">
+        <div class="section-head">
+          <h2>Repositories</h2>
+          <p>Pick one to read its findings. This page does not upload anything.</p>
+        </div>
+        <div id="repo-list" class="repo-list"></div>
+        <p id="org-error" class="note" hidden></p>
+      </section>
+      <section id="findings" class="panel">
+        <div class="section-head">
+          <h2 id="finding-title">Findings</h2>
+          <p id="finding-note">Select a repository.</p>
+        </div>
+        <div id="finding-list"></div>
+      </section>
+    </main>
+    <footer>
+      <p>This is a static sample of the signed-in account. It is not a separate login for each company.</p>
+    </footer>
+    <script type="module" src="./org.js"></script>
+  </body>
+</html>

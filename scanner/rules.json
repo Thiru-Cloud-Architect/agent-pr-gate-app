@@ -1,0 +1,105 @@
+{
+  "secrets": [
+    {
+      "id": "github-pat",
+      "title": "GitHub personal access token",
+      "severity": "high",
+      "pattern": "ghp_[A-Za-z0-9]{36}"
+    },
+    {
+      "id": "github-fine",
+      "title": "GitHub fine-grained token",
+      "severity": "high",
+      "pattern": "github_pat_[A-Za-z0-9_]{20,}"
+    },
+    {
+      "id": "aws-access-key",
+      "title": "AWS access key",
+      "severity": "high",
+      "pattern": "AKIA[0-9A-Z]{16}"
+    },
+    {
+      "id": "private-key",
+      "title": "Private key",
+      "severity": "high",
+      "pattern": "-----BEGIN (?:RSA |OPENSSH |EC )?PRIVATE KEY-----"
+    }
+  ],
+  "code": [
+    {
+      "id": "shell-true",
+      "title": "A shell is turned on for a command",
+      "severity": "high",
+      "pattern": "shell\\s*=\\s*True"
+    },
+    {
+      "id": "eval-call",
+      "title": "Code is run from text",
+      "severity": "high",
+      "pattern": "\\beval\\s*\\("
+    },
+    {
+      "id": "pickle-load",
+      "title": "Python loads a pickle",
+      "severity": "high",
+      "pattern": "pickle\\.loads?\\s*\\("
+    },
+    {
+      "id": "tls-off",
+      "title": "TLS certificate checks are turned off",
+      "severity": "high",
+      "pattern": "verify\\s*=\\s*False"
+    },
+    {
+      "id": "dangerous-html",
+      "title": "HTML is inserted from data",
+      "severity": "medium",
+      "pattern": "dangerouslySetInnerHTML"
+    }
+  ],
+  "advisories": [
+    {
+      "ecosystem": "npm",
+      "name": "lodash",
+      "below": "4.17.21",
+      "id": "CVE-2021-23337",
+      "severity": "high",
+      "fixed": "4.17.21",
+      "summary": "Upgrade. Older lodash template handling has a known command-injection advisory."
+    }
+  ],
+  "infrastructure": [
+    {
+      "id": "open-cidr",
+      "title": "A network rule allows any address",
+      "severity": "high",
+      "pattern": "0\\.0\\.0\\.0/0"
+    },
+    {
+      "id": "public-acl",
+      "title": "Storage is set so anyone can read it",
+      "severity": "high",
+      "pattern": "acl\\s*=\\s*\"public-read\""
+    },
+    {
+      "id": "privileged",
+      "title": "A container is set as privileged",
+      "severity": "high",
+      "pattern": "privileged:\\s*true"
+    }
+  ],
+  "containers": [
+    {
+      "id": "latest-tag",
+      "title": "An image uses the latest tag",
+      "severity": "high",
+      "pattern": "(?:^|\\n)\\s*(?:FROM|image:)\\s+\\S+:latest\\b"
+    },
+    {
+      "id": "user-root",
+      "title": "The image runs as root",
+      "severity": "medium",
+      "pattern": "(?:^|\\n)\\s*USER\\s+root\\s*(?:\\n|$)"
+    }
+  ]
+}

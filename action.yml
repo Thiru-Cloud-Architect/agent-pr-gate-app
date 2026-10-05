@@ -1,12 +1,15 @@
-name: Agent Gate
+name: VETO
 description: >
-  Comment on a pull request with the actor, the production paths they
-  touched, the rollback, and the policy edit that revokes an agent.
+  One pull request comment for production changes, leaked secrets,
+  known-vulnerable packages, and dangerous code.
 inputs:
   fail-on-risk:
-    description: Set to high to fail the check when risk is high. Any other value only comments.
+    description: >
+      critical or high fails the job on a revoked actor, high risk, or a high
+      finding. never only comments. Branch protection must require this check
+      before GitHub blocks the merge.
     required: false
-    default: never
+    default: critical
   policy-path:
     description: Policy file path inside the repository.
     required: false

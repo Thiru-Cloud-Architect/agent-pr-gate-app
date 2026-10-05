@@ -6,10 +6,10 @@ const form = document.querySelector("#review-form")
 const actorInput = document.querySelector("#actor")
 const typeInput = document.querySelector("#actor-type")
 const filesInput = document.querySelector("#files")
-const failInput = document.querySelector("#fail-high")
 const presets = document.querySelector(".presets")
 const comment = document.querySelector("#comment")
 const policyView = document.querySelector("#policy-view")
+const scenarioNote = document.querySelector("#scenario-note")
 
 policyView.textContent = samplePolicyText.trim()
 
@@ -42,6 +42,9 @@ function draw() {
   for (const button of presets.querySelectorAll("button")) {
     button.setAttribute("aria-pressed", preset && button.dataset.id === preset.id ? "true" : "false")
   }
+  scenarioNote.textContent = preset
+    ? preset.detail
+    : "Custom file list. The result still uses the sample rules."
   const files = preset
     ? preset.input.files
     : filesInput.value
@@ -57,7 +60,7 @@ function draw() {
       actorType: typeInput.value,
       policyText: samplePolicyText,
       files,
-      failOnRisk: failInput.checked ? "high" : "never",
+      failOnRisk: "never",
     })
   } catch (error) {
     comment.replaceChildren(errorCard(error.message))
@@ -77,68 +80,47 @@ function sameFiles(scenario) {
 }
 
 function renderCommentCard(report) {
-  const article = el("article", "gh")
-  const header = el("header")
-  header.append(el("span", "avatar", "AG"), el("strong", "", "agent-gate"), el("span", "bot-pill", "bot"))
-  article.append(header)
+  const answer = plainAnswer(report)
+  const article = el("article", "answer")
+  article.append(pill(label(report.verdict), report.verdict))
+  article.append(el("h3", "", answer.title))
+  article.append(el("p", "answer-body", answer.body))
+  article.append(el("p", "who", whoText(report)))
 
-  const body = el("div", "body")
-  const verdict = el("div", "verdict")
-  verdict.append(
-    pill(label(report.verdict), report.verdict),
-    pill(`${title(report.risk)} risk`, report.risk),
-    el("span", "who", whoText(report)),
-  )
-  body.append(verdict)
-  body.append(el("p", "", lead(report.verdict)))
-
-  body.append(el("h3", "", "Prod surface"))
-  if (report.surfaces.length === 0) {
-    body.append(el("p", "", "No configured production path matched this diff."))
-  } else {
-    body.append(table(report.surfaces))
+  article.append(el("h4", "", "What changed"))
+  article.append(listOr(report.breaks, "No production file in the sample rules was changed."))
+  if (report.secrets.length) {
+    article.append(el("h4", "", "Secrets"))
+    article.append(bulletList(report.secrets.map((item) => `${item.title} in ${item.filename}. The value is not shown.`)))
+  }
+  if (report.dependencies.length) {
+    article.append(el("h4", "", "Packages"))
+    article.append(bulletList(report.dependencies.map((item) => `${item.package} ${item.version} matches ${item.id}. Upgrade to ${item.fixed}.`)))
+  }
+  if (report.code.length) {
+    article.append(el("h4", "", "Dangerous code"))
+    article.append(bulletList(report.code.map((item) => `${item.title} in ${item.filename}.`)))
+  }
+  if (report.infrastructure.length) {
+    article.append(el("h4", "", "Infrastructure"))
+    article.append(bulletList(report.infrastructure.map((item) => `${item.title} in ${item.filename}.`)))
+  }
+  if (report.containers.length) {
+    article.append(el("h4", "", "Containers"))
+    article.append(bulletList(report.containers.map((item) => `${item.title} in ${item.filename}.`)))
+  }
+  if (report.practices.length) {
+    article.append(el("h4", "", "Tests"))
+    article.append(bulletList(report.practices.map((item) => item.title)))
   }
 
-  body.append(el("h3", "", "What can break"))
-  body.append(listOr(report.breaks, "Nothing in this diff matches a production path in the policy."))
-
-  body.append(el("h3", "", "Rollback"))
-  body.append(bulletList(report.rollback))
-
-  body.append(el("h3", "", "Revoke"))
-  body.append(el("p", "", report.revoke.prose))
-  if (report.revoke.yaml) body.append(el("pre", "yaml", report.revoke.yaml))
-
-  body.append(el("h3", "", "Ask a human"))
-  body.append(listOr(report.askHuman, "The diff has the artifacts this review knows how to read."))
-
-  const job = el(
-    "p",
-    "job",
-    report.failOnRisk === "high" && report.risk === "high"
-      ? "Check: this run fails the job."
-      : "Check: comment only. The job stays green.",
-  )
-  body.append(job)
-  article.append(body)
+  article.append(el("h4", "", "What you do"))
+  article.append(bulletList(nextSteps(report)))
+  if (report.revoke.yaml && report.verdict === "revoked") {
+    article.append(el("p", "hint", "Add this to the rules so the same agent cannot open that path again."))
+    article.append(el("pre", "yaml", report.revoke.yaml.trim()))
+  }
   return article
-}
-
-function table(surfaces) {
-  const wrap = document.createElement("table")
-  const head = document.createElement("tr")
-  for (const name of ["File", "Change", "Service", "Environment", "Risk"]) {
-    head.append(el("th", "", name))
-  }
-  wrap.append(head)
-  for (const surface of surfaces) {
-    const row = document.createElement("tr")
-    for (const value of [surface.filename, surface.status, surface.service, surface.environment || "—", surface.risk]) {
-      row.append(el("td", "", value))
-    }
-    wrap.append(row)
-  }
-  return wrap
 }
 
 function listOr(items, empty) {
@@ -189,23 +171,66 @@ function fillText(node, text) {
 }
 
 function whoText(report) {
-  if (report.identity.role === "human") return `${report.actor} · human`
-  if (report.identity.listed) return `${report.actor} · agent ${report.identity.name}`
-  return `${report.actor} · unlisted agent`
+  if (report.identity.role === "human") return `Opened by ${report.actor}, a person`
+  if (report.identity.listed) return `Opened by ${report.actor}, an agent you listed`
+  return `Opened by ${report.actor}, a bot you have not listed`
 }
 
-function lead(verdict) {
-  if (verdict === "revoked") return "This agent is denied on a production path in this pull request."
-  if (verdict === "needs-human") return "A named human has to own this change before it merges."
-  return "No deny rule matched. The risk note is informational."
+function plainAnswer(report) {
+  if (report.secrets.length) {
+    return {
+      title: "A secret is in this pull request.",
+      body: "Remove it and rotate it. The comment names the file and does not repeat the secret.",
+    }
+  }
+  if (report.verdict === "revoked") {
+    return {
+      title: "Do not merge this.",
+      body: `${report.actor} changed production files it is not allowed to touch.`,
+    }
+  }
+  if (report.verdict === "needs-human") {
+    return {
+      title: "A person should review this before merge.",
+      body: report.identity.listed
+        ? `${report.actor} changed production files outside the list it is allowed to edit.`
+        : `${report.actor} is not on your agent list, and it changed production files.`,
+    }
+  }
+  if (report.identity.role === "human") {
+    return {
+      title: report.surfaces.length ? "A person changed production." : "A person opened this.",
+      body: report.surfaces.length
+        ? "The comment records the risk. You still decide whether to merge."
+        : "They did not change a production path in the rules.",
+    }
+  }
+  return {
+    title: "This agent stayed in bounds.",
+    body: "It only changed files it is allowed to edit.",
+  }
+}
+
+function nextSteps(report) {
+  const steps = []
+  if (report.secrets.length) steps.push("Delete the secret from the branch and rotate it.")
+  if (report.dependencies.length) steps.push("Upgrade the package named in the comment.")
+  if (report.code.length) steps.push("Remove the dangerous call, or have a person accept it.")
+  if (report.infrastructure.length) steps.push("Tighten the infrastructure change before merge.")
+  if (report.containers.length) steps.push("Pin the image, and do not run it as root unless you mean to.")
+  if (report.practices.length) steps.push("Add a test for the code in this pull request.")
+  if (report.verdict === "revoked") {
+    steps.push("Leave the pull request unmerged.", "Update the rules so those production paths are denied for this agent.")
+  } else if (report.verdict === "needs-human") {
+    steps.push("Ask a named person to review this before merge.")
+  }
+  if (steps.length) return steps
+  if (report.surfaces.length) return ["Read the production note, then merge if you agree."]
+  return ["You can merge it. Nothing in the rules marks these files as production."]
 }
 
 function label(verdict) {
-  if (verdict === "needs-human") return "Needs a named human"
-  if (verdict === "revoked") return "Revoked"
+  if (verdict === "needs-human") return "Needs a person"
+  if (verdict === "revoked") return "Blocked"
   return "Allowed"
-}
-
-function title(value) {
-  return value.charAt(0).toUpperCase() + value.slice(1)
 }

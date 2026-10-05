@@ -1,0 +1,175 @@
+{
+  "account": "Thiru-Cloud-Architect",
+  "scannedAt": "2026-10-04T17:03:51Z",
+  "notScanned": [
+    {
+      "name": "Running application",
+      "why": "This pass reads repository files. It does not open a deployed site."
+    },
+    {
+      "name": "Cloud account",
+      "why": "This pass does not log in to AWS, Azure, or Google Cloud."
+    }
+  ],
+  "repos": [
+    {
+      "name": "agent-pr-gate-app",
+      "fullName": "Thiru-Cloud-Architect/agent-pr-gate-app",
+      "url": "https://github.com/Thiru-Cloud-Architect/agent-pr-gate-app",
+      "private": false,
+      "findings": [],
+      "error": ""
+    },
+    {
+      "name": "gke-fastapi-platform",
+      "fullName": "Thiru-Cloud-Architect/gke-fastapi-platform",
+      "url": "https://github.com/Thiru-Cloud-Architect/gke-fastapi-platform",
+      "private": false,
+      "findings": [
+        {
+          "kind": "practice",
+          "id": "missing-test",
+          "title": "This repository has application code and no test file in the tree we read",
+          "severity": "medium",
+          "filename": "app/main.py",
+          "fix": "Add a test for this repository."
+        }
+      ],
+      "error": ""
+    },
+    {
+      "name": "skylo-migration-architecture",
+      "fullName": "Thiru-Cloud-Architect/skylo-migration-architecture",
+      "url": "https://github.com/Thiru-Cloud-Architect/skylo-migration-architecture",
+      "private": false,
+      "findings": [],
+      "error": ""
+    },
+    {
+      "name": "gke-project-one",
+      "fullName": "Thiru-Cloud-Architect/gke-project-one",
+      "url": "https://github.com/Thiru-Cloud-Architect/gke-project-one",
+      "private": false,
+      "findings": [
+        {
+          "kind": "practice",
+          "id": "missing-test",
+          "title": "This repository has application code and no test file in the tree we read",
+          "severity": "medium",
+          "filename": "app/main.py",
+          "fix": "Add a test for this repository."
+        }
+      ],
+      "error": ""
+    },
+    {
+      "name": "Thirumalaikumar-Intro",
+      "fullName": "Thiru-Cloud-Architect/Thirumalaikumar-Intro",
+      "url": "https://github.com/Thiru-Cloud-Architect/Thirumalaikumar-Intro",
+      "private": false,
+      "findings": [],
+      "error": ""
+    },
+    {
+      "name": "EKS-Project-POC",
+      "fullName": "Thiru-Cloud-Architect/EKS-Project-POC",
+      "url": "https://github.com/Thiru-Cloud-Architect/EKS-Project-POC",
+      "private": false,
+      "findings": [
+        {
+          "kind": "infrastructure",
+          "id": "open-cidr",
+          "title": "A network rule allows any address",
+          "severity": "high",
+          "filename": "terraform/rds/main.tf",
+          "package": "",
+          "version": "",
+          "fix": "Replace the open address with the smallest network that needs access."
+        }
+      ],
+      "error": ""
+    },
+    {
+      "name": "online-portfolio-project-samples",
+      "fullName": "Thiru-Cloud-Architect/online-portfolio-project-samples",
+      "url": "https://github.com/Thiru-Cloud-Architect/online-portfolio-project-samples",
+      "private": false,
+      "findings": [
+        {
+          "kind": "practice",
+          "id": "missing-test",
+          "title": "This repository has application code and no test file in the tree we read",
+          "severity": "medium",
+          "filename": "Cloud-FinOps-Project-Apptio/lambda/lambda_function.py",
+          "fix": "Add a test for this repository."
+        }
+      ],
+      "error": ""
+    },
+    {
+      "name": "aws-url-shortener-app-infra",
+      "fullName": "Thiru-Cloud-Architect/aws-url-shortener-app-infra",
+      "url": "https://github.com/Thiru-Cloud-Architect/aws-url-shortener-app-infra",
+      "private": false,
+      "findings": [
+        {
+          "kind": "practice",
+          "id": "missing-test",
+          "title": "This repository has application code and no test file in the tree we read",
+          "severity": "medium",
+          "filename": "lambda/index.js",
+          "fix": "Add a test for this repository."
+        }
+      ],
+      "error": ""
+    },
+    {
+      "name": "aws-ec2-web-infra",
+      "fullName": "Thiru-Cloud-Architect/aws-ec2-web-infra",
+      "url": "https://github.com/Thiru-Cloud-Architect/aws-ec2-web-infra",
+      "private": false,
+      "findings": [
+        {
+          "kind": "infrastructure",
+          "id": "open-cidr",
+          "title": "A network rule allows any address",
+          "severity": "high",
+          "filename": "terraform/modules/network/main.tf",
+          "package": "",
+          "version": "",
+          "fix": "Replace the open address with the smallest network that needs access."
+        }
+      ],
+      "error": ""
+    },
+    {
+      "name": "MediaWikiCloudInfra",
+      "fullName": "Thiru-Cloud-Architect/MediaWikiCloudInfra",
+      "url": "https://github.com/Thiru-Cloud-Architect/MediaWikiCloudInfra",
+      "private": false,
+      "findings": [
+        {
+          "kind": "infrastructure",
+          "id": "open-cidr",
+          "title": "A network rule allows any address",
+          "severity": "high",
+          "filename": "terraform/main.tf",
+          "package": "",
+          "version": "",
+          "fix": "Replace the open address with the smallest network that needs access."
+        },
+        {
+          "kind": "infrastructure",
+          "id": "open-cidr",
+          "title": "A network rule allows any address",
+          "severity": "high",
+          "filename": "terraform/main_jenkins.tf",
+          "package": "",
+          "version": "",
+          "fix": "Replace the open address with the smallest network that needs access."
+        }
+      ],
+      "error": ""
+    }
+  ]
+}

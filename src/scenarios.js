@@ -11,6 +11,21 @@ const valuesPatch = `@@ -1,3 +1,3 @@
 +replicaCount: 8
 `
 
+const fakeGitHubToken = ["ghp", "a".repeat(36)].join("_")
+
+const secretPatch = `@@ -0,0 +1,2 @@
++const token = "${fakeGitHubToken}"
++subprocess.run(cmd, shell=True)
+`
+
+const packagePatch = `@@ -1,3 +1,4 @@
+ {
+   "dependencies": {
++    "lodash": "4.17.20"
+   }
+ }
+`
+
 const deployPatch = `@@ -1,6 +1,6 @@
  apiVersion: apps/v1
  kind: Deployment
@@ -23,8 +38,8 @@ const deployPatch = `@@ -1,6 +1,6 @@
 export const scenarios = [
   {
     id: "agent-prod",
-    label: "Agent edits production",
-    detail: "cursor[bot] resizes the payments database and raises the replica count.",
+    label: "Agent changes the database",
+    detail: "cursor[bot] resizes the payments database and raises how many copies are running.",
     input: {
       actor: "cursor[bot]",
       actorType: "Bot",
@@ -38,8 +53,8 @@ export const scenarios = [
   },
   {
     id: "human-docs",
-    label: "Human edits the runbook",
-    detail: "A person changes docs only. The comment stays low risk.",
+    label: "A person edits docs",
+    detail: "A person changes the runbook only. No production files move.",
     input: {
       actor: "thirumalai",
       actorType: "User",
@@ -49,8 +64,8 @@ export const scenarios = [
   },
   {
     id: "dependabot",
-    label: "Dependabot lockfile",
-    detail: "A listed agent stays inside its allow list.",
+    label: "Dependabot updates packages",
+    detail: "Dependabot only edits package files, which it is allowed to change.",
     input: {
       actor: "dependabot[bot]",
       actorType: "Bot",
@@ -62,9 +77,23 @@ export const scenarios = [
     },
   },
   {
+    id: "secret-and-package",
+    label: "Secret and an old package",
+    detail: "The pull request adds a GitHub token, turns a shell on, and pins an old lodash.",
+    input: {
+      actor: "cursor[bot]",
+      actorType: "Bot",
+      policyText: samplePolicyText,
+      files: [
+        { filename: "src/config.js", status: "added", patch: secretPatch },
+        { filename: "package.json", status: "modified", patch: packagePatch },
+      ],
+    },
+  },
+  {
     id: "unknown-bot",
-    label: "Unlisted bot touches prod",
-    detail: "A new agent is not on the roster and edits a production manifest.",
+    label: "Unknown bot changes production",
+    detail: "A bot you have not listed edits a production file.",
     input: {
       actor: "nightly-release[bot]",
       actorType: "Bot",

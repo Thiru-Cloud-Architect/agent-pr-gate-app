@@ -70,12 +70,46 @@ nav a:hover { color: var(--ink); }
 main { padding: 0 6vw 4rem; }
 
 .hero {
-  display: grid;
-  grid-template-columns: minmax(0, 1.4fr) minmax(240px, 0.7fr);
-  gap: 3rem;
-  align-items: end;
-  padding: 4.5rem 0 3rem;
+  max-width: 46rem;
+  padding: 3.2rem 0 2rem;
 }
+
+.steps {
+  margin: 1.6rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.85rem;
+}
+
+.steps li {
+  padding-left: 2.4rem;
+  position: relative;
+  line-height: 1.45;
+  color: var(--muted);
+}
+
+.steps li strong { color: var(--ink); }
+
+.steps li::before {
+  content: counter(step);
+  counter-increment: step;
+  position: absolute;
+  left: 0;
+  top: 0.05rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: var(--bg-raise);
+  border: 1px solid var(--line);
+  color: var(--brass);
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.steps { counter-reset: step; }
 
 .eyebrow {
   color: var(--brass);
@@ -127,27 +161,146 @@ button.preset[aria-pressed="true"] {
   border-color: var(--ink);
 }
 
-.facts {
-  margin: 0;
+.covers {
+  margin: 1.2rem 0 0;
+  padding: 0;
+  list-style: none;
   display: grid;
+  gap: 0.45rem;
+}
+
+.covers li {
+  padding-left: 1rem;
+  border-left: 3px solid var(--brass);
+  color: var(--ink);
+}
+
+.shots {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
   gap: 1rem;
+  align-items: start;
 }
 
-.facts div {
-  border-top: 1px solid var(--line);
-  padding-top: 0.8rem;
+.shots figure { margin: 0; }
+
+.shots img {
+  width: 100%;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  display: block;
 }
 
-.facts dt {
-  font-size: 0.75rem;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+.shots figcaption {
+  color: var(--muted);
+  line-height: 1.45;
+  margin-top: 0.7rem;
+}
+
+.shots figcaption strong { color: var(--ink); }
+
+.coverage {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1.2rem;
+}
+
+.coverage th, .coverage td {
+  text-align: left;
+  padding: 0.55rem 0.4rem;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+.coverage th { color: var(--brass); font-size: 0.78rem; letter-spacing: 0.06em; text-transform: uppercase; }
+
+.repo-list { display: grid; gap: 0.6rem; }
+
+button.repo {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  text-align: left;
+  width: 100%;
+  background: var(--bg-raise);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  font: 500 1rem/1.3 "IBM Plex Sans", sans-serif;
+  cursor: pointer;
+}
+
+button.repo[aria-pressed="true"] { border-color: var(--brass); }
+
+.finding-list { margin: 0; padding: 0; list-style: none; display: grid; gap: 0.8rem; }
+
+.finding-list li {
+  background: var(--bg-raise);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
+}
+
+.finding-list p { margin: 0.3rem 0 0; color: var(--muted); }
+
+.field-label {
+  margin: 0 0 0.55rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.panel { padding: 0.5rem 0 2.8rem; }
+
+.install-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 1.2rem;
+  align-items: start;
+}
+
+.install-grid h3 {
+  font-family: Fraunces, Georgia, serif;
+  font-weight: 560;
+  font-size: 1.35rem;
+  margin: 0 0 0.4rem;
+}
+
+.install-grid p { color: var(--muted); line-height: 1.5; }
+
+details summary {
+  cursor: pointer;
   color: var(--brass);
+  margin-bottom: 0.7rem;
 }
 
-.facts dd { margin: 0.3rem 0 0; color: var(--muted); }
+.answer {
+  background: var(--paper);
+  color: var(--paper-ink);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 1.2rem 1.25rem 1.3rem;
+}
 
-.panel { padding: 1rem 0 2.5rem; }
+.answer h3 {
+  font-family: Fraunces, Georgia, serif;
+  font-weight: 560;
+  font-size: 1.8rem;
+  letter-spacing: -0.03em;
+  margin: 0.7rem 0 0.4rem;
+}
+
+.answer h4 {
+  margin: 1.1rem 0 0.35rem;
+  font-size: 0.82rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--paper-muted);
+}
+
+.answer-body { margin: 0; font-size: 1.05rem; line-height: 1.45; }
+
+.hint { color: var(--paper-muted); font-size: 0.92rem; }
 
 .section-head h2 {
   font-family: Fraunces, Georgia, serif;
@@ -317,7 +470,7 @@ footer {
 
 @media (max-width: 860px) {
   html { scroll-padding-top: 7.25rem; }
-  .hero, .workbench { grid-template-columns: 1fr; }
+  .workbench, .install-grid, .shots { grid-template-columns: 1fr; }
   .top { align-items: flex-start; flex-direction: column; }
   .hero { padding-top: 2.2rem; }
 }

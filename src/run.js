@@ -1,4 +1,6 @@
+import { spawnSync } from "node:child_process"
 import { appendFileSync, existsSync, readFileSync } from "node:fs"
+import { fileURLToPath } from "node:url"
 import { resolve } from "node:path"
 import { summarize } from "./ai.js"
 import { evaluate, shouldFail } from "./engine.js"
@@ -49,6 +51,7 @@ export async function reviewEvent(options) {
   }
 
   const actor = pull.user?.login || "unknown"
+  const extraFindings = options.extraFindings || (options.skipPython ? [] : pythonFindings(files))
   let report
   try {
     report = evaluate({
@@ -58,6 +61,7 @@ export async function reviewEvent(options) {
       policyText,
       policyMissing,
       failOnRisk: options.failOnRisk,
+      extraFindings,
     })
   } catch (error) {
     return { exitCode: 1, error: `Policy could not be read: ${error.message}` }
@@ -78,6 +82,7 @@ export async function reviewEvent(options) {
       policyText,
       policyMissing,
       failOnRisk: options.failOnRisk,
+      extraFindings,
       modelSummary: model.summary,
       modelError: model.error,
     })
@@ -136,6 +141,23 @@ async function main() {
   if (result.error) process.stderr.write(`${result.error}\n`)
   if (result.skipped) process.stdout.write(`Agent Gate skipped: ${result.skipped}\n`)
   process.exit(result.exitCode)
+}
+
+function pythonFindings(files) {
+  const script = fileURLToPath(new URL("../scanner/scan.py", import.meta.url))
+  const python = process.platform === "win32" ? "python" : "python3"
+  const result = spawnSync(python, [script], {
+    input: JSON.stringify({ files }),
+    encoding: "utf8",
+    timeout: 20000,
+  })
+  if (result.status !== 0 || !result.stdout) return []
+  try {
+    const payload = JSON.parse(result.stdout)
+    return Array.isArray(payload.findings) ? payload.findings : []
+  } catch {
+    return []
+  }
 }
 
 const calledDirectly = process.argv[1] && process.argv[1].endsWith(`${"run"}.js`)

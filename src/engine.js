@@ -1,5 +1,6 @@
 import { defaultPolicyText, matchGlob, parsePolicy } from "./policy.js"
 import { renderComment } from "./comment.js"
+import { scanFiles } from "./security.js"
 
 const RISK_RANK = { low: 1, medium: 2, high: 3 }
 
@@ -26,6 +27,15 @@ export function evaluate(input) {
   const rollback = rollbackLines(files)
   const revoke = revokeBlock({ identity, actor, files, denied, surfaces })
   const evidence = evidenceLines({ files, surfaces, identity, denied, outsideAllow, actor })
+  const security = scanFiles(files, input.extraFindings)
+
+  const highSecurity = [security.secrets, security.code, security.dependencies, security.infrastructure, security.containers].some((list) =>
+    list.some((item) => item.severity === "high" || item.severity === "critical"),
+  )
+  if (highSecurity) risk = maxRisk(risk, "high")
+  else if (security.code.length || security.dependencies.length || security.infrastructure.length || security.containers.length || security.practices.length) {
+    risk = maxRisk(risk, "medium")
+  }
 
   const report = {
     actor,
@@ -43,8 +53,14 @@ export function evaluate(input) {
     revoke,
     askHuman,
     evidence,
+    secrets: security.secrets,
+    dependencies: security.dependencies,
+    code: security.code,
+    infrastructure: security.infrastructure,
+    containers: security.containers,
+    practices: security.practices,
     policyMissing: Boolean(input.policyMissing),
-    failOnRisk: input.failOnRisk === "high" ? "high" : "never",
+    failOnRisk: input.failOnRisk === "high" || input.failOnRisk === "critical" ? input.failOnRisk : "never",
     modelSummary: input.modelSummary || "",
     modelError: input.modelError || "",
   }
@@ -53,7 +69,11 @@ export function evaluate(input) {
 }
 
 export function shouldFail(report) {
-  return report.failOnRisk === "high" && report.risk === "high"
+  const mode = report.failOnRisk || "never"
+  if (mode !== "high" && mode !== "critical") return false
+  if (report.verdict === "revoked" || report.risk === "high") return true
+  const groups = [report.secrets, report.dependencies, report.code, report.infrastructure, report.containers]
+  return groups.some((list) => (list || []).some((item) => item.severity === "high" || item.severity === "critical"))
 }
 
 export function highestRisk(files, policy) {

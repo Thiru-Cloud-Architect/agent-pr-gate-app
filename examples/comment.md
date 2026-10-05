@@ -53,4 +53,4 @@ This agent is denied on a production path in this pull request. Do not let the a
 
 No model was called. To add a plain-language summary, set repository secret `BLAST_RADIUS_API_KEY` and pass `api-key: ${{ secrets.BLAST_RADIUS_API_KEY }}`. The deterministic review still posts when the key is missing.
 
-Check: comment only. Set `fail-on-risk: high` when a high risk should fail the job.
+Check: comment only. Set `fail-on-risk: critical` when a critical finding should fail the job and block merge.

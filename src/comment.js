@@ -72,6 +72,42 @@ export function renderComment(report) {
   for (const item of report.evidence) lines.push(`- ${item}`)
   lines.push("")
 
+  if (report.secrets?.length) {
+    lines.push("### Secrets", "")
+    for (const item of report.secrets) {
+      lines.push(`- ${item.title} in \`${item.filename}\`. The value is not repeated here. Remove it and rotate it.`)
+    }
+    lines.push("")
+  }
+  if (report.dependencies?.length) {
+    lines.push("### Dependencies", "")
+    for (const item of report.dependencies) {
+      const detail = item.fixed ? `Upgrade to \`${item.fixed}\`.` : item.summary
+      lines.push(`- \`${item.package}\` ${item.version} matches ${item.id}. ${detail}`)
+    }
+    lines.push("")
+  }
+  if (report.code?.length) {
+    lines.push("### Dangerous code", "")
+    for (const item of report.code) lines.push(`- ${item.title} in \`${item.filename}\`.`)
+    lines.push("")
+  }
+  if (report.infrastructure?.length) {
+    lines.push("### Infrastructure", "")
+    for (const item of report.infrastructure) lines.push(`- ${item.title} in \`${item.filename}\`.`)
+    lines.push("")
+  }
+  if (report.containers?.length) {
+    lines.push("### Containers", "")
+    for (const item of report.containers) lines.push(`- ${item.title} in \`${item.filename}\`.`)
+    lines.push("")
+  }
+  if (report.practices?.length) {
+    lines.push("### Tests", "")
+    for (const item of report.practices) lines.push(`- ${item.title} (\`${item.filename}\`).`)
+    lines.push("")
+  }
+
   if (report.policyMissing) {
     lines.push(
       "No `.agent-gate/policy.yaml` was found. This review used built-in path rules. Add a policy file to name agents and revoke them.",
@@ -107,10 +143,14 @@ function who(report) {
 }
 
 function checkLine(report) {
-  if (report.failOnRisk === "high" && report.risk === "high") {
-    return "Check: this run fails the job because `fail-on-risk` is `high` and risk is high."
+  const mode = report.failOnRisk || "never"
+  const blocking = mode === "high" || mode === "critical"
+  const groups = [report.secrets, report.dependencies, report.code, report.infrastructure, report.containers]
+  const criticalFinding = groups.some((list) => (list || []).some((item) => item.severity === "high" || item.severity === "critical"))
+  if (blocking && (report.verdict === "revoked" || report.risk === "high" || criticalFinding)) {
+    return "Check: this run fails the job. GitHub blocks the merge only when branch protection requires this check."
   }
-  return "Check: comment only. Set `fail-on-risk: high` when a high risk should fail the job."
+  return "Check: comment only. Set `fail-on-risk: critical` when a critical finding should fail the job and block merge."
 }
 
 function cell(value) {

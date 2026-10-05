@@ -4,7 +4,8 @@ import { tmpdir } from "node:os"
 import { join } from "node:path"
 import test from "node:test"
 import { summarize } from "../src/ai.js"
-import { shouldFail } from "../src/engine.js"
+import { evaluate, shouldFail } from "../src/engine.js"
+import { scanFiles } from "../src/security.js"
 import { findExistingComment } from "../src/github.js"
 import { matchGlob, parsePolicy } from "../src/policy.js"
 import { reviewEvent } from "../src/run.js"
@@ -50,6 +51,48 @@ test("agent on production is revoked and the comment names the blast radius", ()
   assert.equal(example, report.comment)
 })
 
+test("secrets, dangerous calls, and old packages are named without repeating the secret", () => {
+  const token = ["ghp", "a".repeat(36)].join("_")
+  const report = evaluate({
+    actor: "cursor[bot]",
+    actorType: "Bot",
+    policyText: samplePolicyText,
+    files: [
+      { filename: "src/config.js", status: "added", patch: `+const token = "${token}"\n+subprocess.run(cmd, shell=True)\n` },
+      { filename: "package.json", status: "modified", patch: `+    "lodash": "4.17.20"\n` },
+    ],
+  })
+  assert.equal(report.secrets.length, 1)
+  assert.equal(report.secrets[0].title, "GitHub personal access token")
+  assert.equal(report.comment.includes(token), false)
+  assert.match(report.comment, /### Secrets/)
+  assert.match(report.comment, /A shell is turned on for a command/)
+  assert.match(report.comment, /CVE-2021-23337/)
+  assert.match(report.comment, /4\.17\.21/)
+  assert.equal(report.risk, "high")
+  const clean = scanFiles([{ filename: "docs/runbook.md", patch: "" }])
+  assert.equal(clean.secrets.length, 0)
+})
+
+test("critical mode fails the job and infrastructure findings are named", () => {
+  const report = evaluate({
+    actor: "cursor[bot]",
+    actorType: "Bot",
+    policyText: samplePolicyText,
+    failOnRisk: "critical",
+    files: [
+      { filename: "infra/prod/sg.tf", status: "modified", patch: '+  cidr_blocks = ["0.0.0.0/0"]\n' },
+      { filename: "Dockerfile", status: "added", patch: "+FROM payments:latest\n" },
+    ],
+  })
+  assert.equal(report.infrastructure[0].title, "A network rule allows any address")
+  assert.equal(report.containers[0].title, "An image uses the latest tag")
+  assert.equal(shouldFail(report), true)
+  assert.match(report.comment, /branch protection requires this check/)
+  const quiet = runScenario("human-docs")
+  assert.equal(shouldFail(quiet), false)
+})
+
 test("humans and allowed bots stay informational", () => {
   const human = runScenario("human-docs")
   assert.equal(human.verdict, "allowed")
@@ -76,9 +119,9 @@ test("readme install snippet matches action.yml", () => {
   for (const input of ["fail-on-risk", "policy-path", "api-key", "model", "token"]) {
     assert.match(action, new RegExp(`^  ${input}:`, "m"))
   }
-  assert.match(action, /default: never/)
+  assert.match(action, /default: critical/)
   assert.match(action, /default: \.agent-gate\/policy\.yaml/)
-  assert.match(yaml, /fail-on-risk: never/)
+  assert.match(yaml, /fail-on-risk: critical/)
   assert.match(yaml, /policy-path: \.agent-gate\/policy\.yaml/)
   assert.match(yaml, /secrets\.BLAST_RADIUS_API_KEY/)
   assert.match(yaml, /vars\.BLAST_RADIUS_MODEL/)
