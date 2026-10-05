@@ -34,7 +34,8 @@
           "filename": "demo/veto/settings.py",
           "package": "",
           "version": "",
-          "fix": "Remove the sample token from the repository."
+          "fix": "Remove the sample token from the repository.",
+          "pullRequest": "https://github.com/Thiru-Cloud-Architect/gke-fastapi-platform/pull/1"
         },
         {
           "kind": "practice",
@@ -42,7 +43,8 @@
           "title": "This repository has application code and no test file in the tree we read",
           "severity": "medium",
           "filename": "app/main.py",
-          "fix": "Add a test for this repository."
+          "fix": "Add a test for this repository.",
+          "pullRequest": "https://github.com/Thiru-Cloud-Architect/gke-fastapi-platform/new/main?filename=tests/test_app.py"
         }
       ],
       "error": ""
@@ -67,7 +69,8 @@
           "title": "This repository has application code and no test file in the tree we read",
           "severity": "medium",
           "filename": "app/main.py",
-          "fix": "Add a test for this repository."
+          "fix": "Add a test for this repository.",
+          "pullRequest": "https://github.com/Thiru-Cloud-Architect/gke-project-one/new/main?filename=tests/test_app.py"
         }
       ],
       "error": ""
@@ -94,7 +97,8 @@
           "filename": "terraform/rds/main.tf",
           "package": "",
           "version": "",
-          "fix": "Replace the open address with the smallest network that needs access."
+          "fix": "Replace the open address with the smallest network that needs access.",
+          "pullRequest": "https://github.com/Thiru-Cloud-Architect/EKS-Project-POC/edit/main/terraform/rds/main.tf"
         }
       ],
       "error": ""
@@ -113,7 +117,8 @@
           "filename": "demo/veto/lookup.py",
           "package": "",
           "version": "",
-          "fix": "Use a parameterized query. Do not join input into the SQL text."
+          "fix": "Use a parameterized query. Do not join input into the SQL text.",
+          "pullRequest": "https://github.com/Thiru-Cloud-Architect/online-portfolio-project-samples/compare/main...veto/fix-query?expand=1"
         },
         {
           "kind": "practice",
@@ -121,7 +126,8 @@
           "title": "This repository has application code and no test file in the tree we read",
           "severity": "medium",
           "filename": "Cloud-FinOps-Project-Apptio/lambda/lambda_function.py",
-          "fix": "Add a test for this repository."
+          "fix": "Add a test for this repository.",
+          "pullRequest": "https://github.com/Thiru-Cloud-Architect/online-portfolio-project-samples/new/main?filename=tests/test_lambda.py"
         }
       ],
       "error": ""
@@ -138,7 +144,8 @@
           "title": "This repository has application code and no test file in the tree we read",
           "severity": "medium",
           "filename": "lambda/index.js",
-          "fix": "Add a test for this repository."
+          "fix": "Add a test for this repository.",
+          "pullRequest": "https://github.com/Thiru-Cloud-Architect/aws-url-shortener-app-infra/new/main?filename=tests/test_index.js"
         }
       ],
       "error": ""
@@ -157,7 +164,8 @@
           "filename": "terraform/modules/network/main.tf",
           "package": "",
           "version": "",
-          "fix": "Replace the open address with the smallest network that needs access."
+          "fix": "Replace the open address with the smallest network that needs access.",
+          "pullRequest": "https://github.com/Thiru-Cloud-Architect/aws-ec2-web-infra/edit/main/terraform/modules/network/main.tf"
         }
       ],
       "error": ""
@@ -176,7 +184,8 @@
           "filename": "terraform/main.tf",
           "package": "",
           "version": "",
-          "fix": "Replace the open address with the smallest network that needs access."
+          "fix": "Replace the open address with the smallest network that needs access.",
+          "pullRequest": "https://github.com/Thiru-Cloud-Architect/MediaWikiCloudInfra/edit/main/terraform/main.tf"
         },
         {
           "kind": "infrastructure",
@@ -186,7 +195,8 @@
           "filename": "terraform/main_jenkins.tf",
           "package": "",
           "version": "",
-          "fix": "Replace the open address with the smallest network that needs access."
+          "fix": "Replace the open address with the smallest network that needs access.",
+          "pullRequest": "https://github.com/Thiru-Cloud-Architect/MediaWikiCloudInfra/edit/main/terraform/main_jenkins.tf"
         }
       ],
       "error": ""

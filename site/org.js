@@ -145,7 +145,7 @@ function show(repo) {
   }
   const findings = matching(repo)
   findingNote.textContent = findings.length
-    ? `${findings.length} shown. The fix is a review note, not an automatic code change.`
+    ? `${findings.length} shown. Open fix pull request opens that repository. You still merge it.`
     : "No findings in the files this sample read."
   findingList.replaceChildren()
   if (!findings.length) return
@@ -174,7 +174,18 @@ function show(repo) {
     path.textContent = finding.filename || ""
     file.append(path)
     const fix = document.createElement("td")
-    fix.textContent = finding.fix || ""
+    const note = document.createElement("p")
+    note.textContent = finding.fix || ""
+    fix.append(note)
+    if (finding.pullRequest) {
+      const link = document.createElement("a")
+      link.className = "fix-button"
+      link.href = finding.pullRequest
+      link.target = "_blank"
+      link.rel = "noopener"
+      link.textContent = "Open fix pull request"
+      fix.append(link)
+    }
     row.append(severity, name, file, fix)
     body.append(row)
   }

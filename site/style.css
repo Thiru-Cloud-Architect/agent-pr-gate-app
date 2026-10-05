@@ -290,6 +290,20 @@ button.repo-name {
   font-size: 1rem;
 }
 
+a.fix-button {
+  display: inline-block;
+  margin-top: 0.55rem;
+  background: var(--brass);
+  color: #241c16;
+  text-decoration: none;
+  border-radius: 999px;
+  padding: 0.32rem 0.75rem;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+table.portfolio td p { margin: 0; }
+
 .repo-list { display: grid; gap: 0.6rem; }
 
 button.repo {
